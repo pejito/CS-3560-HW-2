@@ -5,9 +5,12 @@ public class UserGroup implements SysEntry {
 
     private String userGroupID;
     private List<SysEntry> userGroups = new ArrayList<SysEntry>();
+    private long creationTime;
 
     public UserGroup(String newID){
+
         setID(newID);
+        setCreationTime((System.currentTimeMillis()));
     }
 
     @Override
@@ -23,5 +26,13 @@ public class UserGroup implements SysEntry {
     @Override
     public String acceptSysEntryVisitor(SysEntryVisitor visitor) {
         return null;
+    }
+
+    public long getCreationTime(){
+        return creationTime;
+    }
+
+    public void setCreationTime(long newCreationTime){
+        creationTime = newCreationTime;
     }
 }

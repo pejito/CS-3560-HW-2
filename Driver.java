@@ -23,6 +23,8 @@ public class Driver extends Application {
     Button groupTotal;
     Button tweetTotal;
     Button percPositive;
+    Button userGroupVeri;
+    Button lastUpdated;
     TreeView<String> treeVW;
     String chosenUser;
     AdminPanel adminPanel = AdminPanel.getInstance();
@@ -43,7 +45,7 @@ public class Driver extends Application {
                 public void handle(ActionEvent e){
                 String newUser = newUserTXT.getText();
                 if(newUser.length() > 0){
-                    adminPanel.newSysEntry(newUser, treeVW.getSelectionModel().getSelectedItem());
+                    adminPanel.newUser(newUser, treeVW.getSelectionModel().getSelectedItem());
                     }
                 }
             });
@@ -52,7 +54,7 @@ public class Driver extends Application {
                 public void handle(ActionEvent e){
                     String newGroup = newGroupTXT.getText();
                     if(newGroup.length() > 0){
-                        adminPanel.newSysEntry(newGroup, treeVW.getSelectionModel().getSelectedItem());
+                        adminPanel.newUserGroup(newGroup, treeVW.getSelectionModel().getSelectedItem());
                     }
                 }
             });
@@ -87,24 +89,36 @@ public class Driver extends Application {
                     Statistics.generatePositiveTweetsStats("Positive Tweets", adminPanel.countPositive());
                 }
             });
+
+            userGroupVeri = new Button("User/Group Verification");
+            userGroupVeri.setOnAction(new EventHandler<ActionEvent>(){
+                public void handle(ActionEvent e){
+                    Statistics.verifyNames(" ", adminPanel.verifyUsersAndGroups());
+                }
+            });
+
+            lastUpdated = new Button("Find last updated user");
+            lastUpdated.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e){
+                    Statistics.lastUpdated(" ", adminPanel.getLastUpdatedUser());
+                }
+            });
             TreeItem<String> hidden = new TreeItem<>("root");
             hidden.setExpanded(false);
-            TreeItem<String> root = adminPanel.newSysEntry("Everyone", hidden);
-            adminPanel.newSysEntry("Neil", root);
-            adminPanel.newSysEntry("Raven", root);
-            adminPanel.newSysEntry("Bichael", root);
-            adminPanel.newSysEntry("King", root);
-            adminPanel.newSysEntry("Paul", root);
-            adminPanel.newSysEntry("Mari", root);
-            TreeItem<String> bkdDiscord = adminPanel.newSysEntry("Barkada Discord", root);
-            adminPanel.newSysEntry("Joyce", bkdDiscord);
-            adminPanel.newSysEntry("James",bkdDiscord);
-            adminPanel.newSysEntry("Dareick", bkdDiscord);
-            adminPanel.newSysEntry("Brennan", bkdDiscord);
-            TreeItem<String> theRegulars = adminPanel.newSysEntry("The Regular Boys", bkdDiscord);
-            adminPanel.newSysEntry("Pain", theRegulars);
-            adminPanel.newSysEntry("Only Pain", theRegulars);
-            adminPanel.newSysEntry("Stepbrothers", theRegulars);
+            TreeItem<String> root = adminPanel.newUserGroup("Everyone", hidden);
+            adminPanel.newUser("Neil", root);
+            adminPanel.newUser("Raven", root);
+            adminPanel.newUser("Bichael", root);
+            adminPanel.newUser("King", root);
+            adminPanel.newUser("Paul", root);
+            adminPanel.newUser("Mari", root);
+            TreeItem<String> bkdDiscord = adminPanel.newUserGroup("Barkada Discord", root);
+            adminPanel.newUser("Joyce", bkdDiscord);
+            adminPanel.newUser("James",bkdDiscord);
+            adminPanel.newUser("Brennan", bkdDiscord);
+            TreeItem<String> theRegulars = adminPanel.newUser("The Regular Boys", bkdDiscord);
+            adminPanel.newUser("Rigby", theRegulars);
+            adminPanel.newUser("Mordecai", theRegulars);
             treeVW = new TreeView<>(root);
             treeVW.setShowRoot(true);
             treeVW.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -122,8 +136,8 @@ public class Driver extends Application {
             HBox newUserBox = new HBox(20, newUserTXT, newUser);
             HBox newGroupBox = new HBox(20, newGroupTXT, newGroup);
             HBox openUsersWindow = new HBox(userWindow);
-            HBox userGroupStats = new HBox(20, totalUser, groupTotal);
-            HBox tweetStats = new HBox(20, tweetTotal, percPositive);
+            HBox userGroupStats = new HBox(20, totalUser, groupTotal, userGroupVeri);
+            HBox tweetStats = new HBox(20, tweetTotal, percPositive, lastUpdated);
             statsButtons.getChildren().addAll(newUserBox, newGroupBox, openUsersWindow, userGroupStats, tweetStats);
             windowLayout.getChildren().addAll(treeVW, statsButtons);
             Scene scene = new Scene(windowLayout, 800, 400);

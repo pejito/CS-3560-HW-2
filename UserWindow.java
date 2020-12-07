@@ -3,6 +3,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
@@ -18,12 +19,14 @@ public class UserWindow {
 
     private String windowID;
     private ListView<String> timeline = new ListView<String>();
+    private Label updateTime = new Label();
     private AdminPanel panel = AdminPanel.getInstance();
 
     public UserWindow(String newID){
         this.windowID = newID;
         panel.newUserWindow(this);
     }
+
 
     public String getUserWindow() {
         return windowID;
@@ -63,6 +66,7 @@ public class UserWindow {
         };
         followButton.setOnAction(followAction);
 
+
         Button tweetButton = new Button("Tweet");
         EventHandler<ActionEvent> tweetAction = new EventHandler<ActionEvent>(){
             public void handle(ActionEvent e){
@@ -73,19 +77,25 @@ public class UserWindow {
                     panel.newTweet(tweet);
                     timeline.getItems().add(1, tweet);
                     List<String> followers = user.getFollowers();
+                    user.setUpdateTime(System.currentTimeMillis());
+                    updateTime.setText("User last updated at: " + user.getUpdateTime() + " ms");
                     for(String ID : followers){
                         panel.getUserWindow(ID).timeline.getItems().add(1, tweet);
+                        panel.getUserWindow(ID).updateTime.setText("Last updated: " + Long.toString(System.currentTimeMillis()) + " ms");
                     }
                 }
             }
         };
         tweetButton.setOnAction(tweetAction);
 
+        Label creationTime = new Label();
+        creationTime.setText("Time of user's creation: " + Long.toString(user.getCreationTime()) + " ms");
+
         HBox windowLayout = new HBox(20);
         BackgroundFill userWindowBGFill = new BackgroundFill(Color.BLUEVIOLET,null,null);
         Background userWindowBG = new Background(userWindowBGFill);
         windowLayout.setBackground(userWindowBG);
-        VBox followUser = new VBox(20, userToFollow, followButton);
+        VBox followUser = new VBox(20, userToFollow, followButton, creationTime, updateTime);
         followUser.setAlignment(Pos.CENTER);
         HBox followingLST = new HBox(followingList);
         HBox timelineLV = new HBox(timeline);

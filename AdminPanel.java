@@ -31,9 +31,19 @@ public class AdminPanel {
         tweets.add(newTweet);
     }
 
-    public TreeItem<String> newSysEntry(String newID, TreeItem<String> parent){
+    public TreeItem<String> newUser(String newID, TreeItem<String> parent){
         User newSysEntry = new User(newID);
         users.add(newSysEntry);
+        String id = newSysEntry.getID();
+        TreeItem<String> userBranch = new TreeItem<String>(id);
+        userBranch.setExpanded(true);
+        parent.getChildren().add(userBranch);
+        return userBranch;
+    }
+
+    public TreeItem<String> newUserGroup(String newID, TreeItem<String> parent){
+        UserGroup newSysEntry = new UserGroup(newID);
+        userGroups.add(newSysEntry);
         String id = newSysEntry.getID();
         TreeItem<String> userBranch = new TreeItem<String>(id);
         userBranch.setExpanded(true);
@@ -91,4 +101,13 @@ public class AdminPanel {
         return count.acceptSysEntryVisitor(visitor);
     }
 
+    public String verifyUsersAndGroups(){
+        VerifyUsersGroupsSysEntry verify = new VerifyUsersGroupsSysEntry();
+        return verify.acceptSysEntryVisitor(visitor);
+    }
+
+    public String getLastUpdatedUser(){
+        lastUpdatedUserSysEntry lastVisited = new lastUpdatedUserSysEntry();
+        return lastVisited.acceptSysEntryVisitor(visitor);
+    }
 }

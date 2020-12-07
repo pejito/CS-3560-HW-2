@@ -13,6 +13,7 @@ public abstract class Subject implements SysEntry{
 
 	public void update(User user) {
 		user.getNewsFeed().add(user.getTweet());
+		user.setUpdateTime(System.currentTimeMillis());
 	}
 
 	public void notifyObservers(){

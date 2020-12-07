@@ -5,10 +5,13 @@ public class User extends Subject {
 	
 	private String userID;
 	private String tweet;
+	private long creationTime;
+	private long updateTime;
 	private List<String> newsfeed = new ArrayList<String>();
 
 	public User(String ID){
 		this.setID(ID);
+		setCreationTime((System.currentTimeMillis()));
 	}
 
 	@Override
@@ -56,4 +59,19 @@ public class User extends Subject {
 		return null;
 	}
 
+	public long getCreationTime(){
+		return creationTime;
+	}
+
+	public void setCreationTime(long newCreationTime){
+		creationTime = newCreationTime;
+	}
+
+	public long getUpdateTime(){
+		return updateTime;
+	}
+
+	public void setUpdateTime(long newUpdateTime){
+		updateTime = newUpdateTime;
+	}
 }
